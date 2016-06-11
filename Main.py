@@ -74,7 +74,7 @@ def main():
 					for i in range(4):
 						nexx = lasx + dx[i]
 						nexy = lasy + dy[i]
-						if nexx >= 0 and nexy < xSiz and nexy >= 0 and nexy < ySiz:
+						if nexx >= 0 and nexx < xSiz and nexy >= 0 and nexy < ySiz:
 							block = pygame.image.load(dic1[Mps[nexy][nexx]]).convert()
 							screen.blit(block, [nexx * 50, nexy * 50])
 					if localtion_keys[0] / 50 == lasx and localtion_keys[1] / 50 == lasy:
@@ -129,7 +129,7 @@ def main():
 				for j in range(len(Mps[0])):
 					block = pygame.image.load(dic1[Mps[i][j]]).convert()
 					screen.blit(block, cor(j, i))
-			print '            ...',var.root.W / var.root.N * 100.0, '%'
+			print 'rate of winning ...',var.root.W / var.root.N * 100.0, '%'
 			print 'your turn...'
 
 		pygame.display.update()
