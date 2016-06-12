@@ -123,13 +123,13 @@ def main():
 			print 'computer turn...'
 			locked.clear()
 			var = SearchTree(Mps)
-			Mps = var.Get_Nex(500)
-			#var.PrintTree(var.root)
+			Mps = var.Get_Nex(100)
+			var.PrintTree(var.root)
 			for i in range(len(Mps)):
 				for j in range(len(Mps[0])):
 					block = pygame.image.load(dic1[Mps[i][j]]).convert()
 					screen.blit(block, cor(j, i))
-			print 'rate of winning ...',var.root.W / var.root.N * 100.0, '%'
+			print 'rate of winning ...',(var.root.son[var.root.ChoseChild()][0].W + 0.5) / var.root.son[var.root.ChoseChild()][0].N * 100.0, '%'
 			print 'your turn...'
 
 		pygame.display.update()

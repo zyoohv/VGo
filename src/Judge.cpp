@@ -67,7 +67,7 @@ inline bool Can_Win(int a, int d) {
 			sort(as[i].begin(), as[i].end());
 			sort(ds[i].begin(), ds[i].end());
 			for (int j = 0; j < as[i].size(); j++) {
-				if (as[i][j] < ds[i][j]) { cnt++; break; }
+				if (as[i][j] < ds[i][j] + 1) { cnt++; break; }
 			}
 		}
 	}
