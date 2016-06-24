@@ -20,7 +20,7 @@ class Node():
 		self.cnt = 0	# the number of defends
 		for i in range(len(li)):
 			for j in range(len(li[0])):
-				if li[i][j] == 'D' or li[i][j] == '@'
+				if li[i][j] == 'D' or li[i][j] == '@':
 					self.sig[self.cnt] = [j, i]
 					self.cnt += 1
 		'''
@@ -51,7 +51,7 @@ class Node():
 				nexy = self.sig[j][1] + dy[div % 5]
 				div /= 5
 				now_las = '$' if nexl[self.sig[j][1]][self.sig[j][0]] == '@' else '.'
-				if nexx >= 0 and nexx < self.xSiz and nexy >= 0 and nexy < self.ySiz and nexl[nexy][nexx] !='x' and nexl[nexy][nexx] != 'D' and nexl[nexy][nexx] != '@'
+				if nexx >= 0 and nexx < self.xSiz and nexy >= 0 and nexy < self.ySiz and nexl[nexy][nexx] !='x' and nexl[nexy][nexx] != 'D' and nexl[nexy][nexx] != '@':
 					if nexl[nexy][nexx] == '.':
 						nexl[nexy][nexx] = 'D'
 					elif nexl[nexy][nexx] == 'A':

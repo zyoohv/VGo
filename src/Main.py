@@ -135,6 +135,9 @@ def main():
 					flag = 0	# chose next enmy to move
 		pygame.display.update()
 		if len(locked) == NumofEnmy:	# finished move
+			if NumofEnmy == 0:
+				print 'Game over !'
+				break
 			print 'computer turn(' + str(NumofTurn) + ')...',
 			NumofTurn += 1
 			locked.clear()
