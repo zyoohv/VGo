@@ -5,32 +5,21 @@ from pygame.locals import *
 from setting import Mps, xSiz, ySiz
 from SearchTree import SearchTree, Node
 
-'''reading me
-
-1.add 'normal display' in dic1
-2.add 'get red display' in dic2
-3.add action in line 125
-
-1.testing 'move in source and attack it'
-2.find a way to establish more usefull 'Value Evaluate'
-
-'''
-
 dic1 = {	# normal display
 '.' : 'pic/none.png',
 'x' : 'pic/ban.png',
 '$' : 'pic/sor.png',
 'A' : 'pic/enmy.png',
 'D' : 'pic/defend.png',
-
-'@' : 'pic/red_defend.png'
+'@' : 'pic/dsor.png'
 }
 
 dic2 = {	# get red display
 '.' : 'pic/attack.png',
 '$' : 'pic/ar_sor.png',
 'A' : 'pic/red_enmy.png',
-'D' : 'pic/red_defend.png'
+'D' : 'pic/red_defend.png',
+'@' : 'pic/red_dsor.png'
 }
 
 dx = [0, 0, 1, -1]
@@ -129,9 +118,15 @@ def main():
 									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = '.'
 									NumofEnmy -= 1
 								elif Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] == '@':	# attack enmy in source
-									pass
+									block = pygame.image.load('pic/none.png')
+									screen.blit(block, [lasx * 50, lasy * 50])
+									Mps[lasy][lasx] = '.'
+									block = pygame.image.load('pic/sor.png')
+									screen.blit(block, localtion_keys)
+									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = '$'
+									NumofEnmy -= 1
 								move_success = 1
-					if move_success == 0:	# return the begining states
+					if move_success == 0:	# return the begining states if unsuccessful move
 						block = pygame.image.load('pic/enmy.png')
 						screen.blit(block, [lasx * 50, lasy * 50])
 					flag = 0	# chose next enmy to move

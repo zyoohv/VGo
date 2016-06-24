@@ -1,22 +1,23 @@
 #一个垃圾的AI根本干不过人类呢
 
-##运行环境 Windows
+##Run Envrionment: Windows
 
 *	python2.7 + pygame
 
 ![效果图](src/pic/view_windows.png)
 
-##运行环境 Linux
+##Run Envrionment: Linux
 
 *	python2.7 + pygame
 
 ![效果图](src/pic/view_linux.png)
 
-##More
 
-*	more information in "src/Main.py"
+##What do we need now ?
 
-*	抽象成6 * 14维向量，进行分类学习。
+*	finding a way to establish a more usefull 'Value Evaluate' algorithm, for example:
+
+>	抽象成6 * 14维向量，进行分类学习。
 
 >	缺点：没有对抗力度、走法不唯一
 
@@ -25,6 +26,4 @@
 
 ##其他
 
-具体可以参考doc目录下的“建模”，“框架”说明
-
->	there may be something different ^.^
+*	More information in path "doc/", there may be something different ^.^

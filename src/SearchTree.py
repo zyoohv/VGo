@@ -105,9 +105,9 @@ class SearchTree():
 				parameter += ' '
 				for j in range(now.xSiz):
 					parameter += now.li[i][j]
-			p = subprocess.Popen(str(parameter), shell = True)
-			Res = float(p.wait() - 1)
-			#Res = 0.9;
+			#p = subprocess.Popen(str(parameter), shell = True)
+			#Res = float(p.wait() - 1)
+			Res = 0.9;
 			#print 'Res = ', Res
 			now.W += Res
 			if now.N >= N_thr:
