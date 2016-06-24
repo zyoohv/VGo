@@ -18,7 +18,7 @@ int t1 = 0, t2 = 0, t3 = 0;
 int dx[] = {1, -1, 0, 0}, dy[] = {0, 0, 1, -1};
 
 /*
-	如果改变来了地图的尺寸，记得更改这里的vis数组大小
+	如果改变了地图的尺寸，记得更改这里的vis数组大小
 */
 int xSiz, ySiz;
 char vis[Troops << 1][22][22];
@@ -138,13 +138,13 @@ int main(int argc, char *argv[]) {
 			if (flag) break;
 		}
 		if (!flag) {
-			//printf("lose!\n");		//losing
-			return -1;
+			printf("lose!\n");		//losing
+			return 0;
 		}
 		
 	}
 
-	//printf("win!\n");		//win
+	printf("win!\n");		//win
 
-	return 1;
+	return 2;
 }

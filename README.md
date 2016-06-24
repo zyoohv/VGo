@@ -2,26 +2,31 @@
 
 ##运行环境 Windows
 
-*	python2.7_x64 + pygame_x64
-
-*	c++(GCC)4.9.3
+*	python2.7 + pygame
 
 ##运行环境 Linux
 
-暂不确定是否支持
+*	python2.7 + pygame
 
 ##待改进
 
-*	守方可以移动至资源点‘$’内部
+*	more information in "src/Main.py"
 
-*	需支持”部队数量因战斗减少“的情况
+##新的想法
 
-*	AI很弱智
+*	抽象成6 * 14维向量，进行分类学习。
+
+>	缺点：没有对抗力度、走法不唯一
+
+>	克服方式：和其他方法结合使用
+
 
 ##其他
 
 具体可以参考doc目录下的“建模”，“框架”说明
 
+>	there may be something different ^.^
+
 ##运行效果截图
 
-![效果图](pic/view.png)
+![效果图](src/pic/view.png)
