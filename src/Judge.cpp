@@ -13,7 +13,7 @@
 
 using namespace std;
 
-pair<int, int>emy[Troops], us[Troops], sor[Resources];
+pair<int, int>emy[Troops + 3], us[Troops + 3], sor[Resources + 3];
 int t1 = 0, t2 = 0, t3 = 0;
 int dx[] = {1, -1, 0, 0}, dy[] = {0, 0, 1, -1};
 
@@ -39,7 +39,7 @@ void bfs(int id, int x, int y, char *mps[]) {
 		for (int i = 0; i < 4; i++) {
 			int nexx = now.first + dx[i];
 			int nexy = now.second + dy[i];
-			if (In_map(nexx, nexy) && vis[id][nexx][nexy] == -1 && mps[nexx][nexy] != '#') {
+			if (In_map(nexx, nexy) && vis[id][nexx][nexy] == -1 && mps[nexx][nexy] != 'x') {
 				nex.first = nexx;
 				nex.second = nexy;
 				vis[id][nexx][nexy] = vis[id][now.first][now.second] + 1;
@@ -51,7 +51,7 @@ void bfs(int id, int x, int y, char *mps[]) {
 
 vector<int>as[Resources], ds[Resources];
 
-inline bool Can_Win(int a, int d) {
+inline bool Can_Win(int a, int d) {		// a-the way of attack   d-the way of defend
 #ifdef __debug__
 	int tmpa = a, tmpd = d;
 #endif
@@ -79,7 +79,7 @@ inline bool Can_Win(int a, int d) {
 		for (int j = 0; j < ds[i].size(); j++) printf("%d ", ds[i][j]); printf("\n");
 	}
 #endif
-	if (cnt >= Re) return false;
+	if (t3 - cnt <= Re) return false;
 	else return true;
 }
 
@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
 			if (argv[i][j] == 'A') emy[t1++] = make_pair(i, j);
 			else if (argv[i][j] == 'D') us[t2++] = make_pair(i, j);
 			else if (argv[i][j] == '$') sor[t3++] = make_pair(i, j);
+			else if (argv[i][j] == '@') us[t2++] = make_pair(i, j), sor[t3++] = make_pair(i, j);
 		}
 	}
 #ifdef __debug__
@@ -122,15 +123,16 @@ int main(int argc, char *argv[]) {
 			printf("\n");
 		}
 	}
-
-
 	Can_Win(36, 36);
 	return 0;
 #endif
+
 	int all = pow(Resources, Troops) + 0.5;
+
 #ifdef __debug__
 	printf("all = %d\n", all);
 #endif
+
 	for (int s = 0; s < all; s++) {
 		bool flag = false;
 		for (int o = 0; o < all; o++) {
@@ -138,13 +140,13 @@ int main(int argc, char *argv[]) {
 			if (flag) break;
 		}
 		if (!flag) {
-			printf("lose!\n");		//losing
+			//printf("lose!\n");		//losing
 			return 0;
 		}
 		
 	}
 
-	printf("win!\n");		//win
+	//printf("win!\n");		//win
 
 	return 2;
 }

@@ -21,7 +21,9 @@ dic1 = {	# normal display
 'x' : 'pic/ban.png',
 '$' : 'pic/sor.png',
 'A' : 'pic/enmy.png',
-'D' : 'pic/defend.png'
+'D' : 'pic/defend.png',
+
+'@' : 'pic/red_defend.png'
 }
 
 dic2 = {	# get red display

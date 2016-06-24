@@ -4,15 +4,17 @@
 
 *	python2.7 + pygame
 
+![效果图](src/pic/view_windows.png)
+
 ##运行环境 Linux
 
 *	python2.7 + pygame
 
-##待改进
+![效果图](src/pic/view_linux.png)
+
+##More
 
 *	more information in "src/Main.py"
-
-##新的想法
 
 *	抽象成6 * 14维向量，进行分类学习。
 
@@ -26,7 +28,3 @@
 具体可以参考doc目录下的“建模”，“框架”说明
 
 >	there may be something different ^.^
-
-##运行效果截图
-
-![效果图](src/pic/view.png)
