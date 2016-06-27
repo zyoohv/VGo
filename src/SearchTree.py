@@ -1,7 +1,9 @@
 from setting import L, N_thr, C_puct, P
+from Judge import JudgeMap
 import subprocess
 import copy
 import math
+import sys
 
 
 class Node():
@@ -15,14 +17,21 @@ class Node():
 		self.xSiz = len(li[0])
 		self.ySiz = len(li)
 		self.son = []	# son
-		self.sig = {}	# the local of defend
+		self.sig = {}	# the local of defend/attack
+		self.cnt = 0	# the number of defends/attack
 
-		self.cnt = 0	# the number of defends
-		for i in range(len(li)):
-			for j in range(len(li[0])):
-				if li[i][j] == 'D' or li[i][j] == '@':
-					self.sig[self.cnt] = [j, i]
-					self.cnt += 1
+		if self.d % 2:
+			for i in range(len(li)):
+				for j in range(len(li[0])):
+					if li[i][j] == 'D' or li[i][j] == '@':
+						self.sig[self.cnt] = [j, i]
+						self.cnt += 1
+		else:
+			for i in range(len(li)):
+				for j in range(len(li[0])):
+					if li[i][j] == 'A':
+						self.sig[self.cnt] = [j, i]
+						self.cnt += 1
 		'''
 			O-------sig[][0]----->xSiz
 			|
@@ -37,6 +46,34 @@ class Node():
 			v
 			ySiz
 		'''
+
+	def UnfoldSon(self, id):
+		dx = [0, 0, 0, 1, -1]
+		dy = [0, 1, -1, 0, 0]
+		for i in range(5 ** self.son[id].cnt):
+			div = i
+			nexl = copy.deepcopy(self.son[id].li)
+			move_success = 0	# sign if move successfully
+			for j in range(self.son[id].cnt):	# chose the id='j' to move
+				nexx = self.son[id].sig[j][0] + dx[div % 5]
+				nexy = self.son[id].sig[j][1] + dy[div % 5]
+				div /= 5
+				if nexx >= 0 and nexx < self.xSiz and nexy >= 0 and nexy < self.ySiz and nexl[nexy][nexx] !='x' and nexl[nexy][nexx] != 'A':
+					if nexl[nexy][nexx] == '.':
+						nexl[nexy][nexx] = 'A'
+					elif nexl[nexy][nexx] == 'D':
+						nexl[nexy][nexx] = '.'
+					elif nexl[nexy][nexx] == '$':	# 2new defending in source
+						nexl[nexy][nexx] = '.'
+					elif nexl[nexy][nexx] == '@':
+						nexl[nexy][nexx] = '$'
+					move_success += 1
+					nexl[self.son[id].sig[j][1]][self.son[id].sig[j][0]] = '.'
+				elif nexx == self.son[id].sig[j][0] and nexy == self.son[id].sig[j][1]:	# don't move it
+					move_success += 1
+			if move_success == self.son[id].cnt:
+				self.son[id].son.append(Node(nexl, self.d + 2))
+
 
 	def Unfold(self):		# unfold the node
 		if self.d >= L: return
@@ -64,6 +101,8 @@ class Node():
 					move_success += 1
 			if move_success == self.cnt:
 				self.son.append(Node(nexl, self.d + 1))
+		for id in range(len(self.son)):
+			self.UnfoldSon(id)
 
 
 
@@ -74,7 +113,10 @@ class Node():
 		li = []
 		for i in range(len(self.son)):
 			li.append([self.son[i].W / self.son[i].N + C_puct * self.son[i].P * math.sqrt(N) / (1.0 + self.son[i].N), i])
-		li.sort(key = lambda x:x[0], reverse = True)
+		if self.d % 2:
+			li.sort(key = lambda x:x[0], reverse = True)
+		else:
+			li.sort(key = lambda x:x[0])
 		return li[0][1]
 
 
@@ -83,12 +125,24 @@ class Node():
 
 class SearchTree():
 	def __init__(self, li):
-		self.root = Node(li, 1)
+		self.root = Node(li, 1)		# note : the deep of root is 1, but not 0
 		self.root.Unfold()
 
 	def Get_Nex(self, T):
+		las = 0
 		for i in range(T):
+			now = int(100 * i / T)
+			if now > las:
+				las = now
+				sys.stdout.write('[')
+				for j in range(now):
+					sys.stdout.write('#')
+				for j in range(100 - now):
+					sys.stdout.write('.')
+				sys.stdout.write(']' + str(now) + '%\r')
+				sys.stdout.flush()
 			self.Searching(self.root)
+		print ''
 		li = []
 		for i in range(len(self.root.son)):
 			Wp = self.root.son[i].W
@@ -100,14 +154,8 @@ class SearchTree():
 	def Searching(self, now):
 		now.N += 1.0
 		if len(now.son) == 0:
-			parameter = './Judge'
-			for i in range(now.ySiz):
-				parameter += ' '
-				for j in range(now.xSiz):
-					parameter += now.li[i][j]
-			#p = subprocess.Popen(str(parameter), shell = True)
-			#Res = float(p.wait() - 1)
-			Res = 0.9;
+			var = JudgeMap(now.li)
+			Res = var.GetValue()
 			#print 'Res = ', Res
 			now.W += Res
 			if now.N >= N_thr:

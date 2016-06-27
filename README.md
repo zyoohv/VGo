@@ -13,17 +13,14 @@
 ![效果图](src/pic/view_linux.png)
 
 
-##What do we need now ?
+##What do you should do for it ?
 
-*	finding a way to establish a more usefull 'Value Evaluate' algorithm, for example:
+*	finding a way to establish a more usefull and more swift 'Value Evaluate' algorithm
 
->	抽象成6 * 14维向量，进行分类学习。
+*	update the struct of the 'MCTS Tree'
 
->	缺点：没有对抗力度、走法不唯一
+*	all that can make VGo more powerful
 
->	克服方式：和其他方法结合使用
-
-
-##其他
+##Others
 
 *	More information in path "doc/", there may be something different ^.^

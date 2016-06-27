@@ -94,40 +94,40 @@ def main():
 							if nexx == lasx and nexy == lasy:
 								if Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] == '.':	# normal move
 									#print nexx, nexy, localtion_keys
-									block = pygame.image.load('pic/none.png')	#'A' -> '.'
+									block = pygame.image.load('pic/none.png').convert()	#'A' -> '.'
 									screen.blit(block, [lasx * 50, lasy * 50])
 									Mps[lasy][lasx] = '.'
-									block = pygame.image.load('pic/enmy.png')	#'.' -> 'A'
+									block = pygame.image.load('pic/enmy.png').convert()	#'.' -> 'A'
 									screen.blit(block, localtion_keys)
 									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = 'A'
 									locked[(localtion_keys[0] / 50, localtion_keys[1] / 50)] = 1
 								elif Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] == '$':	# destory a source
-									block = pygame.image.load('pic/none.png')
+									block = pygame.image.load('pic/none.png').convert()
 									screen.blit(block, [lasx * 50, lasy * 50])
 									Mps[lasy][lasx] = '.'
-									block = pygame.image.load('pic/enmy.png')
+									block = pygame.image.load('pic/enmy.png').convert()
 									screen.blit(block, localtion_keys)
 									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = 'A'
 									locked[(localtion_keys[0] / 50, localtion_keys[1] / 50)] = 1
 								elif Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] == 'D':	# attack
-									block = pygame.image.load('pic/none.png')
+									block = pygame.image.load('pic/none.png').convert()
 									screen.blit(block, [lasx * 50, lasy * 50])
 									Mps[lasy][lasx] = '.'
-									block = pygame.image.load('pic/none.png')
+									block = pygame.image.load('pic/none.png').convert()
 									screen.blit(block, localtion_keys)
 									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = '.'
 									NumofEnmy -= 1
 								elif Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] == '@':	# attack enmy in source
-									block = pygame.image.load('pic/none.png')
+									block = pygame.image.load('pic/none.png').convert()
 									screen.blit(block, [lasx * 50, lasy * 50])
 									Mps[lasy][lasx] = '.'
-									block = pygame.image.load('pic/sor.png')
+									block = pygame.image.load('pic/sor.png').convert()
 									screen.blit(block, localtion_keys)
 									Mps[localtion_keys[1] / 50][localtion_keys[0] / 50] = '$'
 									NumofEnmy -= 1
 								move_success = 1
 					if move_success == 0:	# return the begining states if unsuccessful move
-						block = pygame.image.load('pic/enmy.png')
+						block = pygame.image.load('pic/enmy.png').convert()
 						screen.blit(block, [lasx * 50, lasy * 50])
 					flag = 0	# chose next enmy to move
 		pygame.display.update()
@@ -135,32 +135,34 @@ def main():
 			if NumofEnmy == 0:
 				print 'Game over !'
 				break
-			print 'computer turn(' + str(NumofTurn) + ')...',
+			print 'computer turn(' + str(NumofTurn) + ')...'
 			NumofTurn += 1
 			locked.clear()
 
 			#	using mcts searching way
 			var = SearchTree(Mps)
-			Mps = var.Get_Nex(500)
+			Mps = var.Get_Nex(len(var.root.son) * 5)
+			#Mps = var.Get_Nex(1)
 
 			#	debug output
 			var.PrintTree(var.root)
+			#var.PrintTree(var.root.son[0])
 
 
-			# recheck the number of enmys and redraw the map
+			# check the number of enmys and redraw the map
 			NumofEnmy = 0
 			for i in range(len(Mps)):
 				for j in range(len(Mps[0])):
-					block = pygame.image.load(dic1[Mps[i][j]]).convert()
-					screen.blit(block, cor(j, i))
 					if Mps[i][j] == 'A':
 						NumofEnmy += 1
+					block = pygame.image.load(dic1[Mps[i][j]]).convert()
+					screen.blit(block, cor(j, i))
 			Wp = var.root.W
 			Np = var.root.N
 			print 'rate of wining: ',(Np + Wp) / (2.0 * Np) * 100.0, '%'
 			print 'your turn...'
 
-		pygame.display.update()
+			pygame.display.update()
 					
 
 if __name__ == '__main__':
