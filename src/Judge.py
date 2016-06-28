@@ -68,44 +68,6 @@ class JudgeMap:
 		for i in range(len(self.ld)):
 			self.dis_d[id].append(vis[self.ld[i][0]][self.ld[i][1]])
 
-	'''
-	def AttackCount(self):
-		Attack_success = 0
-		LenofSource = len(self.ls)
-		LenofAttack = len(self.la)
-		LenofDefend = len(self.ld)
-		for AttackWay in range(LenofSource ** LenofAttack):
-			try_success = LenofSource
-			for DefendWay in range(LenofSource ** LenofDefend):
-				#print '------------', AttackWay, DefendWay
-				Now = [([]) for i in range(len(self.ls))]		# list of struct {time, sig} sig 1-attack 2-defend
-				TmpAttackWay = AttackWay
-				for i in range(LenofAttack):
-					AimSource = TmpAttackWay % LenofSource
-					TmpAttackWay /= LenofSource
-					Now[AimSource].append([self.dis_a[AimSource][i], 1])
-				TmpDefendWay = DefendWay
-				for i in range(LenofDefend):
-					AimSource = TmpDefendWay % LenofSource
-					TmpDefendWay /= LenofSource
-					Now[AimSource].append([self.dis_d[AimSource][i], 2])
-				for i in range(len(Now)):
-					Now[i].sort(cmp = ADCmp)
-					#print i, '=', Now[i]
-				#print '-----------'
-				Can_Attack = 0
-				for i in range(len(Now)):
-					cnt = 0
-					for j in range(len(Now[i])):
-						if Now[i][j][1] == 1: cnt -= 1
-						else: cnt += 1
-						if cnt < 0:
-							Can_Attack += 1
-							break
-				try_success = min(try_success, Can_Attack)
-			Attack_success = max(Attack_success, try_success)
-		return Attack_success
-	'''
 
 	def DefendCount(self):
 		LenofSource = len(self.ls)
@@ -179,7 +141,7 @@ class JudgeMap:
 		#print 'Defend_success = ', Defend_success
 
 		if Defend_success >= 3:
-			return 1.0
+			return 1
 		else:
-			return -1.0
+			return -1
 

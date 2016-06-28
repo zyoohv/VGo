@@ -12,15 +12,16 @@
 
 ![效果图](src/pic/view_linux.png)
 
+##problem
+
+*	there are something wrong in Multi thread...i will fix it tomorrow !
 
 ##What do you should do for it ?
 
 *	finding a way to establish a more usefull and more swift 'Value Evaluate' algorithm
 
-*	update the struct of the 'MCTS Tree'
-
 *	all that can make VGo more powerful
 
 ##Others
 
-*	More information in path "doc/", there may be something different ^.^
+*	More information in path "doc/", althrough there may be something different ^.^

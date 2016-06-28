@@ -3,7 +3,7 @@ import time
 import pygame
 from pygame.locals import *
 from setting import Mps, xSiz, ySiz
-from SearchTree import SearchTree, Node
+from Search import Search
 
 dic1 = {	# normal display
 '.' : 'pic/none.png',
@@ -34,7 +34,7 @@ def main():
 	flag = 0
 	lasx = 0
 	lasy = 0
-	NumofEnmy = 3
+	NumofEnmy = 0
 	NumofTurn = 1
 	pygame.init()
 	global Mps
@@ -47,6 +47,7 @@ def main():
 		for j in range(len(Mps[0])):
 			block = pygame.image.load(dic1[Mps[i][j]]).convert()
 			screen.blit(block, cor(j, i))
+			if Mps[i][j] == 'A': NumofEnmy += 1
 
 	pygame.display.update()
 
@@ -139,15 +140,14 @@ def main():
 			NumofTurn += 1
 			locked.clear()
 
-			#	using mcts searching way
-			var = SearchTree(Mps)
-			Mps = var.Get_Nex(len(var.root.son) * 5)
-			#Mps = var.Get_Nex(1)
+			#	using search
 
-			#	debug output
-			var.PrintTree(var.root)
-			#var.PrintTree(var.root.son[0])
+			Mps = Search(Mps)
 
+
+			#Mps = var.Get_Nex()
+
+			#var.PrintTree(var.root)
 
 			# check the number of enmys and redraw the map
 			NumofEnmy = 0
@@ -157,9 +157,9 @@ def main():
 						NumofEnmy += 1
 					block = pygame.image.load(dic1[Mps[i][j]]).convert()
 					screen.blit(block, cor(j, i))
-			Wp = var.root.W
-			Np = var.root.N
-			print 'rate of wining: ',(Np + Wp) / (2.0 * Np) * 100.0, '%'
+			#Wp = var.root.W
+			#Lp = var.root.L
+			#print 'rate of wining: ',1.0 * Wp / (1.0 + Wp + Lp) * 100.0, '%'
 			print 'your turn...'
 
 			pygame.display.update()
