@@ -16,7 +16,7 @@
 
 *	A more fair rule of the game
 
-##What do you should do for it ?
+##What can you do for it ?
 
 *	finding a way to establish a more usefull and more swift 'Value Evaluate' algorithm
 
