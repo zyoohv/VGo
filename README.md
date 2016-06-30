@@ -1,20 +1,20 @@
 #一个垃圾的AI根本干不过人类呢
 
-##Run Envrionment: Windows
-
-*	python2.7 + pygame
-
-![效果图](src/pic/view_windows.png)
-
 ##Run Envrionment: Linux
 
 *	python2.7 + pygame
 
 ![效果图](src/pic/view_linux.png)
 
-##problem
+##information
 
-*	there are something wrong in Multi thread...i will fix it tomorrow !
+*	optimize the searching algorithm, such as random :)
+
+*	new struct of the 'Searching Tree'
+
+*	Return 'Defend_success' instead of '1/-1'
+
+*	A more fair rule of the game
 
 ##What do you should do for it ?
 

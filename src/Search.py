@@ -1,17 +1,16 @@
 from Judge import JudgeMap
-import copy, math, sys
+import copy, math, sys, random
 import threading
 
 
 NumofThread = 15
 
 Lock = threading.Lock()
-WorkId = 0
 
 class Node():
 	def __init__(self, li, deep):
-		self.L = 0.0	# Lose
-		self.W = 0.0	# Win
+		self.L = 0		# Lose
+		self.W = 0		# Win
 						# Q = W / N 
 		self.d = deep 	# deep of the node, 'root' is 1
 
@@ -20,6 +19,7 @@ class Node():
 		self.ySiz = len(li)
 		self.son = []	# son
 
+		self.NumofSource = 0
 		self.sig = {}	# the local of defend/attack
 		self.cnt = 0	# the number of defends/attack
 		if self.d % 2:
@@ -28,12 +28,16 @@ class Node():
 					if li[i][j] == 'D' or li[i][j] == '@':
 						self.sig[self.cnt] = [j, i]
 						self.cnt += 1
+					if li[i][j] == '$' or li[i][j] == '@':
+						self.NumofSource += 1
 		else:
 			for i in range(len(li)):
 				for j in range(len(li[0])):
 					if li[i][j] == 'A':
 						self.sig[self.cnt] = [j, i]
 						self.cnt += 1
+					if li[i][j] == '$' or li[i][j] == '@':
+						self.NumofSource += 1
 		'''
 			O-------sig[][0]----->xSiz
 			|
@@ -80,7 +84,9 @@ class Node():
 	def Unfold(self):		# unfold the node
 		dx = [0, 0, 0, 1, -1]
 		dy = [0, 1, -1, 0, 0]
-		for i in range(5 ** self.cnt):
+		SearchList = range(5 ** self.cnt)
+		random.shuffle(SearchList)
+		for i in SearchList:		# hei hei...    :), yeah, maybe I'm serious...
 			div = i
 			nexl = copy.deepcopy(self.li)
 			move_success = 0	# sign if move successfully
@@ -107,39 +113,53 @@ class Node():
 
 
 def ProgressBar(p):
-	prog = '[' + '#' * p + '.' * (50 - p) + ']' + str(p * 2) + '%\r'
-	sys.stdout.write(prog)
+	sys.stdout.write('[' + '#' * p + '.' * (50 - p) + ']' + str(p * 2) + '%\r')
 	sys.stdout.flush()
+
+
+WorkId = 0
+root = 0
+BreakSearch = 0
 
 class Worker(threading.Thread):
 	def __init__(self, name):
 		threading.Thread.__init__(self)
-		self.name = name
+		self.name = 'Thread-' + str(name)
 		self.Nowid = 0
+		#print self.name, 'WorkId =', WorkId
 
 	def run(self):
 		global root
 		global WorkId
+		global BreakSearch
 		while True:
-			if WorkId == len(root.son): 
+			if WorkId == len(root.son) or BreakSearch == 1: 
 				break
-			self.Nowid = WorkId
 			if Lock.acquire():
-				#print 'name =', self.name, 'WorkId = ', WorkId
 				ProgressBar(50 * (WorkId + 1) / len(root.son))
+				self.Nowid = WorkId
 				WorkId += 1
 				Lock.release()
 			#else:
 			#	print 'waiting...' 
 			#	continue
+			Min_Defend = root.NumofSource
 			for cas in root.son[self.Nowid].son:
 				var = JudgeMap(cas.li)
-				if var.GetValue() > 0:
-					root.son[self.Nowid].W += 1.0
+				val = var.GetValue()
+				Min_Defend = min(Min_Defend, val)
+				if val >= 3:
+					root.son[self.Nowid].W += 1
 					root.W += 1.0
 				else:
-					root.son[self.Nowid].L += 1.0
+					root.son[self.Nowid].L += 1
 					root.L += 1.0
+			if Min_Defend == root.NumofSource:	# it is a perfect choice !
+				root.son[self.Nowid].L = -1
+			if root.son[self.Nowid].L == -1 and Lock.acquire():
+				ProgressBar(50)
+				BreakSearch = 1
+				Lock.release()
 
 def PrintTree(now):
 	fout = open('debug.txt', 'w')
@@ -159,9 +179,19 @@ def PrintTree(now):
 
 def Search(Mps):
 	global root
+	global WorkId
+	global NumofThread
+	global BreakSearch
 	root = Node(Mps, 1)
 	root.Unfold()
-	ThreadList = [Worker(i) for i in range(NumofThread)]
+
+	WorkId = 0
+	BreakSearch = 0
+
+	ThreadList = []
+	for i in range(NumofThread):
+		NewThread = Worker(i)
+		ThreadList.append(NewThread)
 
 	for i in range(NumofThread):
 		ThreadList[i].start()
@@ -172,13 +202,14 @@ def Search(Mps):
 	print ''
 	li = []
 	for i in range(len(root.son)):
-		Wp = 1.0 * root.son[i].W
-		Lp = 1.0 * root.son[i].L
+		Wp = root.son[i].W
+		Lp = root.son[i].L
+		if Wp == 0 and Lp == 0: continue	# we know nothing about it
 		li.append([1.0 * Wp / (1.0 + Lp + Wp), i])
 	li.sort(key = lambda x:x[0], reverse = True)
 
 	# debug
-	PrintTree(root)
+	#PrintTree(root)
 
 	return  root.son[li[0][1]].li
 

@@ -2,19 +2,18 @@
 #		1.we assume that the number of 'A' can be diffend from 'D'
 #		2.'D' first
 #		3.if losing 2 or more than 2 '$'s, we will lose the game
-
+	
 
 def ADCmp(var1, var2):	# sig:1 - Attack and sig:2 - Defend, of course Attack first
 	if var1[0] == var2[0]:	# struct {time ,sig}
 		return var2[1] - var1[1]
 	else:
 		return var1[0] - var2[0]
-	
+
 
 class JudgeMap:
 	def __init__(self, li):
 
-		
 		# The information of Map
 		
 		self.li = li
@@ -140,8 +139,9 @@ class JudgeMap:
 
 		#print 'Defend_success = ', Defend_success
 
-		if Defend_success >= 3:
-			return 1
-		else:
-			return -1
+		return Defend_success
+		#if Defend_success >= 3:
+		#	return 1
+		#else:
+		#	return -1
 
